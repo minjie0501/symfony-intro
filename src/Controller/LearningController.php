@@ -2,56 +2,72 @@
 
 namespace App\Controller;
 
-use PhpParser\Builder\Method;
+use App\Entity\Name;
+use App\Entity\Task;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\HttpFoundation\Request;
 
 class LearningController extends AbstractController
 {
-
-
+    // TODO: add form builder for the other form
 
     #[Route('/', name: 'home-page')]
     public function showMyName(SessionInterface $session): Response
     {
+        // // creates a task object and initializes some data for this example
+        $name = new Name();
+
+        $form = $this->createFormBuilder($name)
+            ->add('name', TextType::class)
+            ->add('save', SubmitType::class, ['label' => 'Save Name'])
+                ->setAction($this->generateUrl('change-name'))
+            ->getForm();
+
+        if(isset($_POST['name'])){
+            $session->set('name', $_POST['name']);
+        }
         if ($session->get('name') != null) {
             $name = $session->get('name');
-        }else{
+        } else{
             $name = "Unknown";
         }
         return $this->render('learning/index.html.twig', [
-            'name' =>$name,
+            'name' => $name,
+            'page' => "change-page",
+            'form' => $form->createView()
         ]);
     }
 
     #[Route('/change-name', name: 'change-name', methods: ['POST'])]
-    public function changeMyName(SessionInterface $session): Response
+    public function changeMyName(SessionInterface $session, Request $request): Response
     {
-        if(isset($_POST['name'])){
-            $session->set('name', $_POST['name']);
-            return $this->redirectToRoute('home-page');
+        if (isset($request->request->get('form')['name'])) {
+            $session->set('name', $request->request->get('form')['name']);
+            $name = $session->get('name');
+            return $this->render('learning/index.html.twig', [
+                'name' => $name,
+                'page' => 'home'
+            ]);
         }
     }
 
-    // #[Route('/learning', name: 'learning')]
-    // public function index(): Response
-    // {
-    //     return $this->render('learning/index.html.twig', [
-    //         'controller_name' => 'LearningController',
-    //     ]);
-    // }
-
-
-
-    #[Route('/about-me', name: 'about-me')]
-    public function aboutMe(): Response
+    #[Route('/about-becode', name: 'about-me')]
+    public function aboutMe(SessionInterface $session): Response
     {
-        return new Response(
-            '<html><body>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quas molestiae labore laudantium, quam necessitatibus inventore ipsa vero libero repellendus aliquid praesentium nemo. Facilis, hic non.
-            </body></html>'
-        );
+        if ($session->get('name') != null) {
+            $name = $session->get('name');
+            return $this->render('learning/about-me.html.twig', [
+                'title' => 'About me',
+                'name' => $name
+            ]);
+        } else {
+            return $this->redirectToRoute('home-page');
+        }
     }
 }
