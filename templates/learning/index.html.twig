@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello LearningController!
+{% block title %}Welcome on my page!
 {% endblock %}
 
 {% block body %}
@@ -17,24 +17,9 @@
 		}
 	</style>
 
-	{# <div class="example-wrapper"> #}
-	{# <h1>Hello {{ controller_name }}! ✅</h1>
-				
-				    This friendly message is coming from:
-				    <ul>
-				        <li>Your controller at <code><a href="{{ 'C:/Users/Min Jie/Documents/BeCode/PHP/symfony-intro/src/Controller/LearningController.php'|file_link(0) }}">src/Controller/LearningController.php</a></code></li>
-				        <li>Your template at <code><a href="{{ 'C:/Users/Min Jie/Documents/BeCode/PHP/symfony-intro/templates/learning/index.html.twig'|file_link(0) }}">templates/learning/index.html.twig</a></code></li>
-				    </ul> #}
-	{# </div> #}
-		<nav>
-			<a href={{ path('home-page', relative = false) }}> Home</a>
-		|
-		<a href={{ path('about-me', relative = false) }}>About me</a>
-
-	</nav>
 	<h1>
-		Hello
-		{{name}}!
+		Hello{{name}}
+		!
 	</h1>
 
 	{% if  (page == "change-page") %}

@@ -19,7 +19,6 @@ class LearningController extends AbstractController
     // public function __construct()
     // {
     //     // create a log channel
-    //     $log = new Logger('name');
     //     $log->pushHandler(new StreamHandler('./log.info', Logger::INFO));
     
     //     // add records to the log
