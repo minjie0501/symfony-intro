@@ -74,7 +74,8 @@ class LearningController extends AbstractController
             $name = $session->get('name');
             return $this->render('learning/about-me.html.twig', [
                 'title' => 'About me',
-                'name' => $name
+                'name' => $name,
+                // 'date' => date("Y/m/d")
             ]);
         } else {
             return $this->redirectToRoute('home-page');

@@ -7,7 +7,9 @@
 {% block menu %}
 	{{ parent() }}
 	<div>
-
+		<div>Europe: {{ date('now')|format_date(pattern="d/M/Y") }}</div>
+		<div>America: {{ date('now')|format_date(pattern="M/D/Y") }}</div>
+		<div>China & Japan: {{ date('now')|format_date(pattern="M/Y/d") }}</div>
 	</div>
 {% endblock %}{% block body %}
 <style>
@@ -24,5 +26,5 @@
 </style>
 <h1>About me</h1>
 <h2>My name is:
-	{{name}}</h2>
-{# {{ "now"|date("d/m/Y H:i", "Europe/Berlin") }} #}{% endblock %}
+	{{name|title}}</h2>
+{% endblock %}
