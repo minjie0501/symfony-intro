@@ -10,75 +10,88 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
-// use Monolog\Logger;
-// use Monolog\Handler\StreamHandler;
 
 class LearningController extends AbstractController
 {
 
-    // public function __construct()
-    // {
-    //     // create a log channel
-    //     $log->pushHandler(new StreamHandler('./log.info', Logger::INFO));
-    
-    //     // add records to the log
-    //     $log->info('Bar');
-    // }
+    private $session;
 
-    // TODO: add form builder for the other form
+    public function __construct(SessionInterface $session)
+    {
+        $this->session = $session;
+    }
+
 
     #[Route('/', name: 'home-page')]
-    public function showMyName(SessionInterface $session): Response
+    public function showMyName(Request $request): Response
     {
         // // creates a task object and initializes some data for this example
         $name = new Name();
 
         $form = $this->createFormBuilder($name)
-            ->add('name', TextType::class)
+            ->add('name', TextType::class, array('attr' => array('class' => 'border-2 ml-2')))
             ->add('save', SubmitType::class, ['label' => 'Save Name'])
-                ->setAction($this->generateUrl('change-name'))
+            ->setAction($this->generateUrl('change-name'))
             ->getForm();
 
-        if(isset($_POST['name'])){
-            $session->set('name', $_POST['name']);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            if (isset($request->request->get('form')['name'])) {
+                $this->session->set('name', $request->request->get('form')['name']);
+            }
         }
-        if ($session->get('name') != null) {
-            $name = $session->get('name');
-        } else{
+        if ($this->session->get('name') != null) {
+            $name = $this->session->get('name');
+        } else {
             $name = "Unknown";
         }
         return $this->render('learning/index.html.twig', [
             'name' => $name,
             'page' => "change-page",
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'title' => "Home"
         ]);
     }
 
     #[Route('/change-name', name: 'change-name', methods: ['POST'])]
-    public function changeMyName(SessionInterface $session, Request $request): Response
+    public function changeMyName(Request $request): Response
     {
-        if (isset($request->request->get('form')['name'])) {
-            $session->set('name', $request->request->get('form')['name']);
-            $name = $session->get('name');
-            return $this->render('learning/index.html.twig', [
-                'name' => $name,
-                'page' => 'home'
-            ]);
+        // $name = new Name();
+        $form = $this->createFormBuilder()
+            ->add('name', TextType::class)
+            ->add('save', SubmitType::class, ['label' => 'Change Name'])
+            ->setAction($this->generateUrl('home-page'))
+            ->getForm();
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            if (isset($request->request->get('form')['name'])) {
+                $this->session->set('name', $request->request->get('form')['name']);
+                $name = $this->session->get('name');
+                return $this->render('learning/index.html.twig', [
+                    'name' => $name,
+                    'page' => 'home',
+                    'form' => $form->createView(),
+                    'title' => 'Change Name'
+                ]);
+            }
         }
     }
 
+
     #[Route('/about-becode', name: 'about-me')]
-    public function aboutMe(SessionInterface $session): Response
+    public function aboutMe(): Response
     {
-        if ($session->get('name') != null) {
-            $name = $session->get('name');
+        if ($this->session->get('name') != null) {
+            $name = $this->session->get('name');
             return $this->render('learning/about-me.html.twig', [
                 'title' => 'About me',
                 'name' => $name,
-                // 'date' => date("Y/m/d")
             ]);
         } else {
-            return $this->redirectToRoute('home-page');
+            // return $this->redirectToRoute('home-page');
+            return $this->forward('App\Controller\LearningController::showMyName');
         }
     }
 }

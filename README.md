@@ -19,11 +19,13 @@
 
 ## 2. Twig
 ### Learning objective
-- Get familiar with using Twig as a templating language
+- Get familiar with using Twig
 
 ### Features to implement
-- [ ] Footer
-- [ ] Menu
-- [ ] About me
-- [ ] Home page
-- [ ] Creating a custom twig helper
+- [x] Footer
+- [x] Menu
+- [x] About me
+    - Show the current date in 3 different formats in the menu
+    - Extend a twig block
+- [x] Home page -> capitalize all words of the name
+- [x] Creating a custom twig helper

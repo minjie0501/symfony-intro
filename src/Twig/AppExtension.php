@@ -14,7 +14,7 @@ class AppExtension extends AbstractExtension
         ];
     }
 
-    public function generateQuote(): void
+    public function generateQuote(): string
     {
         $quotes = [
             "“Two things are infinite: the universe and human stupidity; and I'm not sure about the universe.”
@@ -32,6 +32,6 @@ class AppExtension extends AbstractExtension
             - Koen Eelen"
         ];
 
-        echo $quotes[array_rand($quotes)];
+        return $quotes[array_rand($quotes)];
     }
 }

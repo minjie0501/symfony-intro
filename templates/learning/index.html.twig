@@ -1,35 +1,16 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Welcome on my page!
-{% endblock %}
+{% block title %}{{title}}{% endblock %}
 
 {% block body %}
-	<style>
-		.example-wrapper {
-			margin: 1em auto;
-			max-width: 800px;
-			width: 95%;
-			font: 18px / 1.5 sans-serif;
-		}
-		.example-wrapper code {
-			background: #F5F5F5;
-			padding: 2px 6px;
-		}
-	</style>
-
-	<h1>
+	<br>
+	<h1 class="font-bold text-2xl">
 		Hello {{name|title}}!
 	</h1>
 
-	{% if  (page == "change-page") %}
+	{% if (page == "change-page") %}
 		{{ form(form) }}
 			{% else %}
-				<form action="/" method="POST">
-					<label for="name">Name</label>
-					<input type="text" name="name">
-					<button type="submit">Change Name</button>
-				</form>
-		{% endif %}
-
-
-	{% endblock %}
+		{{form(form)}}
+	{% endif %}
+{% endblock %}
