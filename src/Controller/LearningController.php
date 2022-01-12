@@ -34,7 +34,6 @@ class LearningController extends AbstractController
             ->setAction($this->generateUrl('change-name'))
             ->getForm();
 
-
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             if (isset($request->request->get('form')['name'])) {
@@ -88,6 +87,7 @@ class LearningController extends AbstractController
             return $this->render('learning/about-me.html.twig', [
                 'title' => 'About me',
                 'name' => $name,
+                'date' => date("Y/m/d"),
             ]);
         } else {
             // return $this->redirectToRoute('home-page');

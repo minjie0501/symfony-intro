@@ -19,6 +19,11 @@
 	</head>
 		<body>
 			<style>
+body {
+	margin: 0;
+	padding: 0;
+	background-color: #d1d0cd;
+}
 footer {
 	position: fixed;
 	left: 0;
@@ -28,19 +33,49 @@ footer {
 	background: #999;
 }
 aside {
-	width: 30%;
-	padding-left: 15px;
-	margin-left: 15px;
+	width: 13%;
 	float: left;
-	height:100vh;
+	height: calc(100vh - 60px);
 	font-style: italic;
 	background-color: lightgray;
 }
+
+aside > * {
+	padding-left: 10px;
+}
+
+.content{
+	position:absolute;
+	left: 15%;
+}
+.sidebar {
+	font-size: 30px;
+}
+
+#form{
+	display:flex;
+}
+
+
+#form > div > label{
+	padding-right: 5px;
+}
+
+#form > div > button{
+	margin-left: 5px;
+}
+
+.required{
+}
 		</style>
 			<aside>
-				{% block menu %}<a href={{ path('home-page', relative = false) }} class="font-bold"> Home</a>
-				|
-				<a href={{ path('about-me', relative = false) }} class="font-bold">About me</a><br></br>
+				{% block menu %}
+					<div>
+						<a href={{ path('home-page', relative = false) }} class="font-bold sidebar"> Home</a>
+				</div>
+
+				<div>
+					<a href={{ path('about-me', relative = false) }} class="font-bold sidebar">About me</a>
+				</div><br></br>
 		{% endblock %}
-	</body>
-</html></aside>{% block body %}{% endblock %}<br>{{(quote())|nl2br}}</body><footer>© Becode</footer></html>
+		</aside></html><div class="content">{% block body %}{% endblock %}<br>{{(quote())|nl2br}}</div></body><footer>© Becode</footer></html>
